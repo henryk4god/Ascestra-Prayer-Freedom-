@@ -1,0 +1,667 @@
+<div class="ancestral-prayer-widget">
+  <style>
+    :root {
+      --primary-color: #6d28d9;
+      --secondary-color: #8b5cf6;
+      --bg-color: #f8fafc;
+      --text-color: #1e293b;
+      --light-text: #64748b;
+      --card-bg: #ffffff;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --progress-color: #3b82f6;
+    }
+
+    .ancestral-prayer-widget {
+      font-family: 'Poppins', sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .widget-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .widget-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .widget-subtitle {
+      font-size: 0.875rem;
+      color: var(--light-text);
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.2);
+    }
+
+    .btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn:disabled {
+      background-color: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .result-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border: 1px solid #f1f5f9;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .result-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .copy-btn {
+      background-color: #f1f5f9;
+      color: var(--text-color);
+      border: none;
+      padding: 0.375rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy-btn:hover {
+      background-color: #e2e8f0;
+    }
+
+    .copy-btn.copied {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .copy-icon {
+      margin-right: 4px;
+    }
+
+    .prayer-points {
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .days-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .day-btn {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .day-btn:hover {
+      border-color: var(--primary-color);
+    }
+
+    .day-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    /* Progress Tracking Styles */
+    .progress-container {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .progress-days {
+      font-size: 0.875rem;
+      color: var(--light-text);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--progress-color);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .milestones {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .milestone-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .milestone-card.completed {
+      border-color: var(--success-color);
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    .milestone-card.current {
+      border-color: var(--progress-color);
+      background-color: rgba(59, 130, 246, 0.05);
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+
+    .milestone-day {
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .milestone-status {
+      font-size: 0.75rem;
+      color: var(--light-text);
+    }
+
+    .milestone-card.completed .milestone-status {
+      color: var(--success-color);
+    }
+
+    .milestone-card.current .milestone-status {
+      color: var(--progress-color);
+      font-weight: 500;
+    }
+
+    .check-in-btn {
+      margin-top: 1rem;
+      background-color: var(--warning-color);
+    }
+
+    .check-in-btn:hover {
+      background-color: #f97316;
+    }
+
+    .check-in-btn:disabled {
+      background-color: #cbd5e1;
+    }
+
+    @media (max-width: 480px) {
+      .ancestral-prayer-widget {
+        padding: 1rem;
+      }
+      
+      .widget-title {
+        font-size: 1.25rem;
+      }
+      
+      .days-selector {
+        flex-wrap: wrap;
+      }
+      
+      .day-btn {
+        flex: 0 0 calc(33.333% - 0.5rem);
+      }
+
+      .milestones {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+    }
+  </style>
+
+  <div class="widget-header">
+    <h1 class="widget-title">Ancestral Freedom Prayer Generator</h1>
+    <p class="widget-subtitle">Receive personalized prayer points to break generational curses based on your family history</p>
+  </div>
+
+  <form id="prayerForm">
+    <div class="form-group">
+      <label for="familyHistory">Describe your family history or challenges (optional)</label>
+      <textarea id="familyHistory" placeholder="E.g., History of addiction, financial struggles, broken relationships..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Select program duration</label>
+      <div class="days-selector">
+        <button type="button" class="day-btn active" data-days="7">7 Days</button>
+        <button type="button" class="day-btn" data-days="21">21 Days</button>
+        <button type="button" class="day-btn" data-days="40">40 Days</button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn" id="generateBtn">
+      <span id="btnText">Generate Prayer Points</span>
+      <span id="btnSpinner" class="loading-spinner" style="display: none;"></span>
+    </button>
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+  </form>
+
+  <div id="resultContainer" class="result-card" style="display: none;">
+    <div class="result-header">
+      <h2 class="result-title">Your Personalized Prayer Points</h2>
+      <button class="copy-btn" id="copyBtn">
+        <span class="copy-icon">📋</span>
+        <span id="copyText">Copy</span>
+      </button>
+    </div>
+    <div id="prayerPoints" class="prayer-points"></div>
+  </div>
+
+  <!-- Progress Tracking Section -->
+  <div id="progressContainer" class="progress-container">
+    <div class="progress-header">
+      <h3 class="progress-title">Your Prayer Journey</h3>
+      <span class="progress-days" id="progressDays">Day 1 of <span id="totalDays">7</span></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <button class="btn check-in-btn" id="checkInBtn">
+      <span id="checkInText">Check In Today</span>
+      <span id="checkInSpinner" class="loading-spinner" style="display: none;"></span>
+    </button>
+    
+    <h4 style="margin: 1.5rem 0 0.75rem; font-size: 0.875rem; color: var(--light-text);">Spiritual Milestones</h4>
+    <div class="milestones" id="milestonesContainer">
+      <!-- Milestones will be added dynamically -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const prayerForm = document.getElementById('prayerForm');
+      const generateBtn = document.getElementById('generateBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const resultContainer = document.getElementById('resultContainer');
+      const prayerPoints = document.getElementById('prayerPoints');
+      const copyBtn = document.getElementById('copyBtn');
+      const copyText = document.getElementById('copyText');
+      const errorMessage = document.getElementById('errorMessage');
+      const dayButtons = document.querySelectorAll('.day-btn');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressDays = document.getElementById('progressDays');
+      const totalDays = document.getElementById('totalDays');
+      const checkInBtn = document.getElementById('checkInBtn');
+      const checkInText = document.getElementById('checkInText');
+      const checkInSpinner = document.getElementById('checkInSpinner');
+      const milestonesContainer = document.getElementById('milestonesContainer');
+      
+      let selectedDays = 7;
+      let currentDay = 1;
+      let programStartDate = null;
+      let localStorageKey = 'ancestralPrayerProgram';
+
+      // Initialize from localStorage if available
+      loadProgress();
+
+      // Handle day selection
+      dayButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          dayButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          selectedDays = parseInt(this.dataset.days);
+          totalDays.textContent = selectedDays;
+        });
+      });
+
+      // Form submission
+      prayerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const familyHistory = document.getElementById('familyHistory').value;
+        
+        // Show loading state
+        generateBtn.disabled = true;
+        btnText.textContent = 'Generating...';
+        btnSpinner.style.display = 'inline-block';
+        errorMessage.style.display = 'none';
+        
+        try {
+          // 🔑 SAFE: Call your Google Apps Script backend (NO KEY in frontend!)
+          const response = await fetch('‎https://script.google.com/macros/s/AKfycbzOvakw_dl-QjKcvmwQXcC95G6xWiSp93ykEl5rcZXuz3P0giqs1P1pGq-Suw32fwMpig/exec', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              familyHistory: familyHistory,
+              selectedDays: selectedDays
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.error?.message || 'Failed to generate prayer points');
+          }
+          
+          // Display results
+          prayerPoints.textContent = data.choices[0].message.content;
+          resultContainer.style.display = 'block';
+          
+          // Initialize progress tracking
+          initializeProgress(selectedDays);
+          
+          // Scroll to results
+          resultContainer.scrollIntoView({ behavior: 'smooth' });
+          
+        } catch (error) {
+          console.error('Error:', error);
+          errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
+          errorMessage.style.display = 'block';
+        } finally {
+          // Reset button state
+          generateBtn.disabled = false;
+          btnText.textContent = 'Generate Prayer Points';
+          btnSpinner.style.display = 'none';
+        }
+      });
+      
+      // Copy to clipboard
+      copyBtn.addEventListener('click', function() {
+        const textToCopy = prayerPoints.textContent;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyText.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyText.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy:', err);
+          errorMessage.textContent = 'Failed to copy text.';
+          errorMessage.style.display = 'block';
+        });
+      });
+
+      // Check-in button
+      checkInBtn.addEventListener('click', function() {
+        checkInSpinner.style.display = 'inline-block';
+        checkInText.textContent = 'Recording...';
+        checkInBtn.disabled = true;
+        
+        // Simulate API call or processing
+        setTimeout(() => {
+          currentDay++;
+          updateProgress();
+          saveProgress();
+          
+          checkInSpinner.style.display = 'none';
+          checkInText.textContent = currentDay < selectedDays ? 'Check In Tomorrow' : 'Program Completed!';
+          checkInBtn.disabled = currentDay >= selectedDays;
+        }, 800);
+      });
+
+      function initializeProgress(days) {
+        selectedDays = days;
+        currentDay = 1;
+        programStartDate = new Date();
+        totalDays.textContent = selectedDays;
+        
+        // Show progress container
+        progressContainer.style.display = 'block';
+        
+        // Update progress display
+        updateProgress();
+        
+        // Create milestones
+        createMilestones();
+      }
+
+      function updateProgress() {
+        const progressPercent = Math.min(100, (currentDay / selectedDays) * 100);
+        progressFill.style.width = `${progressPercent}%`;
+        progressDays.textContent = `Day ${currentDay} of ${selectedDays}`;
+        
+        // Update milestones
+        updateMilestones();
+        
+        // Update check-in button
+        if (currentDay >= selectedDays) {
+          checkInText.textContent = 'Program Completed!';
+          checkInBtn.disabled = true;
+        }
+      }
+
+      function createMilestones() {
+        milestonesContainer.innerHTML = '';
+        
+        // Key milestones (7, 21, 40 days or similar)
+        const milestoneDays = [];
+        if (selectedDays >= 7) milestoneDays.push(7);
+        if (selectedDays >= 21) milestoneDays.push(21);
+        if (selectedDays >= 40) milestoneDays.push(40);
+        
+        // Add program completion as milestone
+        milestoneDays.push(selectedDays);
+        
+        // Create milestone cards
+        milestoneDays.forEach(day => {
+          const milestoneCard = document.createElement('div');
+          milestoneCard.className = 'milestone-card';
+          milestoneCard.dataset.day = day;
+          
+          const dayElement = document.createElement('div');
+          dayElement.className = 'milestone-day';
+          dayElement.textContent = `Day ${day}`;
+          
+          const statusElement = document.createElement('div');
+          statusElement.className = 'milestone-status';
+          statusElement.textContent = 'Upcoming';
+          
+          milestoneCard.appendChild(dayElement);
+          milestoneCard.appendChild(statusElement);
+          milestonesContainer.appendChild(milestoneCard);
+        });
+        
+        updateMilestones();
+      }
+
+      function updateMilestones() {
+        const milestoneCards = document.querySelectorAll('.milestone-card');
+        
+        milestoneCards.forEach(card => {
+          const day = parseInt(card.dataset.day);
+          const statusElement = card.querySelector('.milestone-status');
+          
+          card.classList.remove('completed', 'current');
+          
+          if (day < currentDay) {
+            card.classList.add('completed');
+            statusElement.textContent = 'Completed';
+          } else if (day === currentDay) {
+            card.classList.add('current');
+            statusElement.textContent = 'Current';
+          } else {
+            statusElement.textContent = 'Upcoming';
+          }
+        });
+      }
+
+      function saveProgress() {
+        const progressData = {
+          selectedDays,
+          currentDay,
+          programStartDate: programStartDate.toISOString(),
+          prayerPoints: prayerPoints.textContent
+        };
+        localStorage.setItem(localStorageKey, JSON.stringify(progressData));
+      }
+
+      function loadProgress() {
+        const savedData = localStorage.getItem(localStorageKey);
+        if (savedData) {
+          try {
+            const progressData = JSON.parse(savedData);
+            selectedDays = progressData.selectedDays;
+            currentDay = progressData.currentDay;
+            programStartDate = new Date(progressData.programStartDate);
+            prayerPoints.textContent = progressData.prayerPoints || '';
+            
+            // Update UI
+            dayButtons.forEach(btn => {
+              btn.classList.toggle('active', parseInt(btn.dataset.days) === selectedDays);
+            });
+            
+            if (prayerPoints.textContent) {
+              resultContainer.style.display = 'block';
+              progressContainer.style.display = 'block';
+              totalDays.textContent = selectedDays;
+              updateProgress();
+              createMilestones();
+              
+              if (currentDay >= selectedDays) {
+                checkInText.textContent = 'Program Completed!';
+                checkInBtn.disabled = true;
+              } else {
+                checkInText.textContent = 'Check In Today';
+                checkInBtn.disabled = false;
+              }
+            }
+          } catch (e) {
+            console.error('Error loading progress:', e);
+          }
+        }
+      }
+    });
+  </script>
+</div>
