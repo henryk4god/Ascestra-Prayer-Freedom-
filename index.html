@@ -11,7 +11,67 @@
 
     <script>
         async function testBackend() {
+            const GAS_URL = '<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Prayer Backend</title>
+</head>
+<body>
+    <h1>Test Prayer Backend Connection</h1>
+    
+    <button onclick="testBackend()">Test Backend with Sample Data</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        async function testBackend() {
             const GAS_URL = 'https://script.google.com/macros/s/AKfycbz63OM5mWdxumbZvbOS2s5nji4qqlKmUNzWHXpuWrcptHCW-JBamQNammM_-dROeJ11/exec';
+            
+            const testData = {
+                familyHistory: "History of financial struggles and relationship issues in family",
+                selectedDays: 7
+            };
+
+            try {
+                document.getElementById('result').innerHTML = 'Sending request...';
+                
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <div style="color: green; font-weight: bold;">
+                            ✅ SUCCESS! Backend is working perfectly!
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <strong>Generated Prayer:</strong><br>
+                            <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">${data.choices[0].message.content}</pre>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <div style="color: red; font-weight: bold;">
+                            ❌ Backend Error: ${data.error}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <div style="color: red; font-weight: bold;">
+                        ❌ Network Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>';
             
             const testData = {
                 familyHistory: "History of financial struggles and relationship issues in family",
