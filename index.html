@@ -1,59 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test Prayer Backend</title>
+    <title>GAS Connection Test</title>
 </head>
 <body>
-    <h1>Test Prayer Backend Connection</h1>
+    <h1>🔧 Test GAS Connection</h1>
     
-    <button onclick="testBackend()">Test Backend with Sample Data</button>
-    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+    <div>
+        <label>GAS URL:</label>
+        <input type="text" id="gasUrl" style="width: 400px;" 
+               value="https://script.google.com/macros/s/AKfycbz63OM5mWdxumbZvbOS2s5nji4qqlKmUNzWHXpuWrcptHCW-JBamQNammM_-dROeJ11/exec">
+    </div>
+    
+    <button onclick="testGet()">Test GET Request</button>
+    <button onclick="testPost()">Test POST Request</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px;"></div>
 
     <script>
-        async function testBackend() {
-            const GAS_URL = 'https://script.google.com/macros/s/AKfycbwPwUkD0zL-iH3DK6esHuE9aIJlTxvDgef6Wrah00FixzpyyuP5Brpvtj2lOfjB7KaKcQ/exec';
-            
-            const testData = {
-                familyHistory: "History of financial struggles and relationship issues in family",
-                selectedDays: 7
-            };
+        function log(message) {
+            document.getElementById('result').innerHTML += message + '<br>';
+        }
 
+        async function testGet() {
+            const url = document.getElementById('gasUrl').value;
+            log('Testing GET request to: ' + url);
+            
             try {
-                document.getElementById('result').innerHTML = 'Sending request...';
-                
-                const response = await fetch(GAS_URL, {
+                const response = await fetch(url);
+                const data = await response.json();
+                log('✅ GET Success: ' + JSON.stringify(data));
+            } catch (error) {
+                log('❌ GET Failed: ' + error.message);
+            }
+        }
+
+        async function testPost() {
+            const url = document.getElementById('gasUrl').value;
+            log('Testing POST request to: ' + url);
+            
+            try {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(testData)
+                    body: JSON.stringify({
+                        familyHistory: "Test history",
+                        selectedDays: 7
+                    })
                 });
-
-                const data = await response.json();
                 
-                if (data.success) {
-                    document.getElementById('result').innerHTML = `
-                        <div style="color: green; font-weight: bold;">
-                            ✅ SUCCESS! Backend is working perfectly!
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <strong>Generated Prayer:</strong><br>
-                            <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">${data.choices[0].message.content}</pre>
-                        </div>
-                    `;
-                } else {
-                    document.getElementById('result').innerHTML = `
-                        <div style="color: red; font-weight: bold;">
-                            ❌ Backend Error: ${data.error}
-                        </div>
-                    `;
-                }
+                const data = await response.json();
+                log('✅ POST Success: ' + JSON.stringify(data));
             } catch (error) {
-                document.getElementById('result').innerHTML = `
-                    <div style="color: red; font-weight: bold;">
-                        ❌ Network Error: ${error.message}
-                    </div>
-                `;
+                log('❌ POST Failed: ' + error.message);
+                
+                // Try without Content-Type header
+                try {
+                    log('Trying without Content-Type header...');
+                    const response2 = await fetch(url, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            familyHistory: "Test history",
+                            selectedDays: 7
+                        })
+                    });
+                    
+                    const data2 = await response2.json();
+                    log('✅ POST Success (no header): ' + JSON.stringify(data2));
+                } catch (error2) {
+                    log('❌ POST Failed (no header): ' + error2.message);
+                }
             }
         }
     </script>
