@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ancestral Freedom Prayer Generator</title>
+  <title>Ancestral Freedom Prayer Generator - TEST MODE</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="ancestral-prayer-widget">
     <style>
+      /* [KEEP ALL YOUR EXISTING CSS STYLES - THEY ARE FINE] */
       :root {
         --primary-color: #6d28d9;
         --secondary-color: #8b5cf6;
@@ -246,152 +247,51 @@
         border-color: var(--primary-color);
       }
 
-      /* Progress Tracking Styles */
-      .progress-container {
-        margin-top: 2rem;
-        display: none;
-      }
-
-      .progress-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-      }
-
-      .progress-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-color);
-      }
-
-      .progress-days {
-        font-size: 0.875rem;
-        color: var(--light-text);
-      }
-
-      .progress-bar {
-        height: 8px;
-        background-color: #e2e8f0;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        overflow: hidden;
-      }
-
-      .progress-fill {
-        height: 100%;
-        background-color: var(--progress-color);
-        border-radius: 4px;
-        transition: width 0.5s ease;
-      }
-
-      .milestones {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 0.75rem;
-      }
-
-      .milestone-card {
-        background-color: white;
+      .test-section {
+        background: #f1f5f9;
+        border: 2px dashed #cbd5e1;
         border-radius: 8px;
-        padding: 0.75rem;
-        border: 1px solid #e2e8f0;
-        text-align: center;
-        transition: all 0.3s ease;
+        padding: 1rem;
+        margin: 1rem 0;
       }
 
-      .milestone-card.completed {
-        border-color: var(--success-color);
-        background-color: rgba(16, 185, 129, 0.05);
+      .test-btn {
+        background-color: #f59e0b;
+        margin: 0.5rem;
       }
 
-      .milestone-card.current {
-        border-color: var(--progress-color);
-        background-color: rgba(59, 130, 246, 0.05);
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
-      }
-
-      .milestone-day {
-        font-weight: 600;
-        font-size: 0.875rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .milestone-status {
-        font-size: 0.75rem;
-        color: var(--light-text);
-      }
-
-      .milestone-card.completed .milestone-status {
-        color: var(--success-color);
-      }
-
-      .milestone-card.current .milestone-status {
-        color: var(--progress-color);
-        font-weight: 500;
-      }
-
-      .check-in-btn {
-        margin-top: 1rem;
-        background-color: var(--warning-color);
-      }
-
-      .check-in-btn:hover {
+      .test-btn:hover {
         background-color: #f97316;
       }
 
-      .check-in-btn:disabled {
-        background-color: #cbd5e1;
-      }
-
-      .debug-info {
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 1rem;
+      .url-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
         font-size: 0.75rem;
-        color: var(--light-text);
-        display: none;
-      }
-
-      .debug-toggle {
-        background: none;
-        border: none;
-        color: var(--light-text);
-        font-size: 0.75rem;
-        cursor: pointer;
-        text-decoration: underline;
-        margin-top: 0.5rem;
-      }
-
-      @media (max-width: 480px) {
-        .ancestral-prayer-widget {
-          padding: 1rem;
-        }
-        
-        .widget-title {
-          font-size: 1.25rem;
-        }
-        
-        .days-selector {
-          flex-wrap: wrap;
-        }
-        
-        .day-btn {
-          flex: 0 0 calc(33.333% - 0.5rem);
-        }
-
-        .milestones {
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        }
+        margin-bottom: 0.5rem;
       }
     </style>
 
     <div class="widget-header">
-      <h1 class="widget-title">Ancestral Freedom Prayer Generator</h1>
-      <p class="widget-subtitle">Receive personalized prayer points to break generational curses based on your family history</p>
+      <h1 class="widget-title">🔧 Ancestral Freedom Prayer Generator - TEST MODE</h1>
+      <p class="widget-subtitle">Testing connection to Google Apps Script backend</p>
+    </div>
+
+    <!-- TEST SECTION -->
+    <div class="test-section">
+      <h3 style="margin-top: 0; color: #f59e0b;">🔧 Connection Test</h3>
+      
+      <label for="gasUrl">Your GAS Web App URL:</label>
+      <input type="text" id="gasUrl" class="url-input" 
+             value="https://script.google.com/macros/s/AKfycbyT-s51aaCM0CjY0RIEjoAeuEJtPDTWYU--ND3KYbvkqPzRYnSJmmqkOZAhDwD60-AbWQ/exec"
+             placeholder="Paste your GAS Web App URL here">
+      
+      <button class="btn test-btn" id="testConnectionBtn">Test Connection</button>
+      <button class="btn test-btn" id="testBackendBtn">Test Backend Function</button>
+      
+      <div id="testResult" style="margin-top: 1rem; font-size: 0.875rem;"></div>
     </div>
 
     <form id="prayerForm">
@@ -427,75 +327,87 @@
       <div id="prayerPoints" class="prayer-points"></div>
     </div>
 
-    <!-- Progress Tracking Section -->
-    <div id="progressContainer" class="progress-container">
-      <div class="progress-header">
-        <h3 class="progress-title">Your Prayer Journey</h3>
-        <span class="progress-days" id="progressDays">Day 1 of <span id="totalDays">7</span></span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-      </div>
-      
-      <button class="btn check-in-btn" id="checkInBtn">
-        <span id="checkInText">Check In Today</span>
-        <span id="checkInSpinner" class="loading-spinner" style="display: none;"></span>
-      </button>
-      
-      <h4 style="margin: 1.5rem 0 0.75rem; font-size: 0.875rem; color: var(--light-text);">Spiritual Milestones</h4>
-      <div class="milestones" id="milestonesContainer">
-        <!-- Milestones will be added dynamically -->
-      </div>
-    </div>
-
-    <!-- Debug Information -->
-    <button class="debug-toggle" id="debugToggle">Show Debug Info</button>
-    <div class="debug-info" id="debugInfo">
-      <strong>Debug Information:</strong>
-      <div id="debugContent"></div>
-    </div>
-
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // ✅ ALL VARIABLES DECLARED PROPERLY
         const prayerForm = document.getElementById('prayerForm');
         const generateBtn = document.getElementById('generateBtn');
         const btnText = document.getElementById('btnText');
         const btnSpinner = document.getElementById('btnSpinner');
         const resultContainer = document.getElementById('resultContainer');
         const prayerPoints = document.getElementById('prayerPoints');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyText = document.getElementById('copyText');
         const errorMessage = document.getElementById('errorMessage');
         const dayButtons = document.querySelectorAll('.day-btn');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressFill = document.getElementById('progressFill');
-        const progressDays = document.getElementById('progressDays');
-        const totalDays = document.getElementById('totalDays');
-        const checkInBtn = document.getElementById('checkInBtn');
-        const checkInText = document.getElementById('checkInText');
-        const checkInSpinner = document.getElementById('checkInSpinner');
-        const milestonesContainer = document.getElementById('milestonesContainer');
-        const debugToggle = document.getElementById('debugToggle');
-        const debugInfo = document.getElementById('debugInfo');
-        const debugContent = document.getElementById('debugContent');
+        const gasUrlInput = document.getElementById('gasUrl');
+        const testConnectionBtn = document.getElementById('testConnectionBtn');
+        const testBackendBtn = document.getElementById('testBackendBtn');
+        const testResult = document.getElementById('testResult');
         
         let selectedDays = 7;
-        let currentDay = 1;
-        let programStartDate = null;
-        let localStorageKey = 'ancestralPrayerProgram';
+        let currentGASUrl = gasUrlInput.value;
 
-        // 🔥 REPLACE THIS WITH YOUR ACTUAL GAS WEB APP URL
-        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyT-s51aaCM0CjY0RIEjoAeuEJtPDTWYU--ND3KYbvkqPzRYnSJmmqkOZAhDwD60-AbWQ/exec';
+        // Update GAS URL when input changes
+        gasUrlInput.addEventListener('input', function() {
+          currentGASUrl = this.value;
+        });
 
-        // Initialize from localStorage if available
-        loadProgress();
+        // Test connection button
+        testConnectionBtn.addEventListener('click', async function() {
+          testResult.innerHTML = 'Testing connection...';
+          testResult.style.color = '#f59e0b';
+          
+          try {
+            const response = await fetch(currentGASUrl, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              testResult.innerHTML = '✅ SUCCESS: Connection established! Backend is reachable.';
+              testResult.style.color = '#10b981';
+            } else {
+              testResult.innerHTML = `❌ HTTP Error: ${response.status} ${response.statusText}`;
+              testResult.style.color = '#ef4444';
+            }
+          } catch (error) {
+            testResult.innerHTML = `❌ CONNECTION FAILED: ${error.message}`;
+            testResult.style.color = '#ef4444';
+            console.error('Connection test failed:', error);
+          }
+        });
 
-        // Debug toggle
-        debugToggle.addEventListener('click', function() {
-          const isVisible = debugInfo.style.display === 'block';
-          debugInfo.style.display = isVisible ? 'none' : 'block';
-          debugToggle.textContent = isVisible ? 'Show Debug Info' : 'Hide Debug Info';
+        // Test backend function
+        testBackendBtn.addEventListener('click', async function() {
+          testResult.innerHTML = 'Testing backend function...';
+          testResult.style.color = '#f59e0b';
+          
+          try {
+            const response = await fetch(currentGASUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                familyHistory: "Test prayer request",
+                selectedDays: 7
+              })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+              testResult.innerHTML = '✅ SUCCESS: Backend function working! Response received.';
+              testResult.style.color = '#10b981';
+            } else {
+              testResult.innerHTML = `❌ BACKEND ERROR: ${data.error || 'Unknown error'}`;
+              testResult.style.color = '#ef4444';
+            }
+          } catch (error) {
+            testResult.innerHTML = `❌ REQUEST FAILED: ${error.message}`;
+            testResult.style.color = '#ef4444';
+            console.error('Backend test failed:', error);
+          }
         });
 
         // Handle day selection
@@ -504,7 +416,6 @@
             dayButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             selectedDays = parseInt(this.dataset.days);
-            totalDays.textContent = selectedDays;
           });
         });
 
@@ -520,71 +431,55 @@
           btnSpinner.style.display = 'inline-block';
           errorMessage.style.display = 'none';
           
-          // Debug info
-          updateDebugInfo('Sending request to backend...', 'info');
-          
           try {
-            console.log('Sending request to:', GAS_WEB_APP_URL);
-            console.log('Request data:', { familyHistory, selectedDays });
+            console.log('Using GAS URL:', currentGASUrl);
             
-            const requestBody = {
-              familyHistory: familyHistory,
-              selectedDays: selectedDays
-            };
-
-            updateDebugInfo(`Request: POST ${GAS_WEB_APP_URL}`, 'info');
-            updateDebugInfo(`Data: ${JSON.stringify(requestBody)}`, 'info');
-
-            const response = await fetch(GAS_WEB_APP_URL, {
+            const response = await fetch(currentGASUrl, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(requestBody)
+              body: JSON.stringify({
+                familyHistory: familyHistory,
+                selectedDays: selectedDays
+              })
             });
-
-            updateDebugInfo(`Response status: ${response.status}`, 'info');
-
+            
             if (!response.ok) {
-              const errorText = await response.text();
-              updateDebugInfo(`Error response: ${errorText}`, 'error');
               throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+            
             const data = await response.json();
-            console.log('Response data:', data);
-            updateDebugInfo(`Success: ${JSON.stringify(data, null, 2)}`, 'success');
             
             if (!data.success) {
               throw new Error(data.error || 'Unknown error from server');
-            }
-
-            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-              throw new Error('Invalid response format from server');
             }
             
             // Display results
             prayerPoints.textContent = data.choices[0].message.content;
             resultContainer.style.display = 'block';
             
-            // Initialize progress tracking
-            initializeProgress(selectedDays);
-            
             // Scroll to results
             resultContainer.scrollIntoView({ behavior: 'smooth' });
             
           } catch (error) {
             console.error('Error:', error);
-            updateDebugInfo(`Fetch Error: ${error.message}`, 'error');
             
             let userMessage = error.message;
             if (error.message.includes('Failed to fetch')) {
-              userMessage = 'Network error: Cannot connect to server. Please check your internet connection and try again.';
-            } else if (error.message.includes('HTTP error')) {
-              userMessage = 'Server error: Please try again in a few moments.';
+              userMessage = `
+                <strong>Network Connection Failed</strong><br>
+                Possible causes:<br>
+                1. Wrong GAS URL - Check the URL above<br>
+                2. GAS not deployed - Make sure it's deployed as Web App<br>
+                3. CORS issue - Try the test buttons above<br>
+                4. Network firewall - Try different network<br>
+                <br>
+                <em>Use the test buttons above to diagnose the issue.</em>
+              `;
             }
             
-            errorMessage.textContent = userMessage;
+            errorMessage.innerHTML = userMessage;
             errorMessage.style.display = 'block';
           } finally {
             // Reset button state
@@ -593,188 +488,6 @@
             btnSpinner.style.display = 'none';
           }
         });
-        
-        // Copy to clipboard
-        copyBtn.addEventListener('click', function() {
-          const textToCopy = prayerPoints.textContent;
-          navigator.clipboard.writeText(textToCopy).then(() => {
-            copyText.textContent = 'Copied!';
-            copyBtn.classList.add('copied');
-            setTimeout(() => {
-              copyText.textContent = 'Copy';
-              copyBtn.classList.remove('copied');
-            }, 2000);
-          }).catch(err => {
-            console.error('Failed to copy:', err);
-            errorMessage.textContent = 'Failed to copy text.';
-            errorMessage.style.display = 'block';
-          });
-        });
-
-        // Check-in button
-        checkInBtn.addEventListener('click', function() {
-          checkInSpinner.style.display = 'inline-block';
-          checkInText.textContent = 'Recording...';
-          checkInBtn.disabled = true;
-          
-          // Simulate API call or processing
-          setTimeout(() => {
-            currentDay++;
-            updateProgress();
-            saveProgress();
-            
-            checkInSpinner.style.display = 'none';
-            checkInText.textContent = currentDay < selectedDays ? 'Check In Tomorrow' : 'Program Completed!';
-            checkInBtn.disabled = currentDay >= selectedDays;
-          }, 800);
-        });
-
-        function initializeProgress(days) {
-          selectedDays = days;
-          currentDay = 1;
-          programStartDate = new Date();
-          totalDays.textContent = selectedDays;
-          
-          // Show progress container
-          progressContainer.style.display = 'block';
-          
-          // Update progress display
-          updateProgress();
-          
-          // Create milestones
-          createMilestones();
-          
-          updateDebugInfo(`Progress initialized: ${selectedDays} days`, 'success');
-        }
-
-        function updateProgress() {
-          const progressPercent = Math.min(100, (currentDay / selectedDays) * 100);
-          progressFill.style.width = `${progressPercent}%`;
-          progressDays.textContent = `Day ${currentDay} of ${selectedDays}`;
-          
-          // Update milestones
-          updateMilestones();
-          
-          // Update check-in button
-          if (currentDay >= selectedDays) {
-            checkInText.textContent = 'Program Completed!';
-            checkInBtn.disabled = true;
-          }
-        }
-
-        function createMilestones() {
-          milestonesContainer.innerHTML = '';
-          
-          // Key milestones (7, 21, 40 days or similar)
-          const milestoneDays = [];
-          if (selectedDays >= 7) milestoneDays.push(7);
-          if (selectedDays >= 21) milestoneDays.push(21);
-          if (selectedDays >= 40) milestoneDays.push(40);
-          
-          // Add program completion as milestone
-          milestoneDays.push(selectedDays);
-          
-          // Create milestone cards
-          milestoneDays.forEach(day => {
-            const milestoneCard = document.createElement('div');
-            milestoneCard.className = 'milestone-card';
-            milestoneCard.dataset.day = day;
-            
-            const dayElement = document.createElement('div');
-            dayElement.className = 'milestone-day';
-            dayElement.textContent = `Day ${day}`;
-            
-            const statusElement = document.createElement('div');
-            statusElement.className = 'milestone-status';
-            statusElement.textContent = 'Upcoming';
-            
-            milestoneCard.appendChild(dayElement);
-            milestoneCard.appendChild(statusElement);
-            milestonesContainer.appendChild(milestoneCard);
-          });
-          
-          updateMilestones();
-        }
-
-        function updateMilestones() {
-          const milestoneCards = document.querySelectorAll('.milestone-card');
-          
-          milestoneCards.forEach(card => {
-            const day = parseInt(card.dataset.day);
-            const statusElement = card.querySelector('.milestone-status');
-            
-            card.classList.remove('completed', 'current');
-            
-            if (day < currentDay) {
-              card.classList.add('completed');
-              statusElement.textContent = 'Completed';
-            } else if (day === currentDay) {
-              card.classList.add('current');
-              statusElement.textContent = 'Current';
-            } else {
-              statusElement.textContent = 'Upcoming';
-            }
-          });
-        }
-
-        function saveProgress() {
-          const progressData = {
-            selectedDays,
-            currentDay,
-            programStartDate: programStartDate.toISOString(),
-            prayerPoints: prayerPoints.textContent
-          };
-          localStorage.setItem(localStorageKey, JSON.stringify(progressData));
-        }
-
-        function loadProgress() {
-          const savedData = localStorage.getItem(localStorageKey);
-          if (savedData) {
-            try {
-              const progressData = JSON.parse(savedData);
-              selectedDays = progressData.selectedDays;
-              currentDay = progressData.currentDay;
-              programStartDate = new Date(progressData.programStartDate);
-              prayerPoints.textContent = progressData.prayerPoints || '';
-              
-              // Update UI
-              dayButtons.forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.days) === selectedDays);
-              });
-              
-              if (prayerPoints.textContent) {
-                resultContainer.style.display = 'block';
-                progressContainer.style.display = 'block';
-                totalDays.textContent = selectedDays;
-                updateProgress();
-                createMilestones();
-                
-                if (currentDay >= selectedDays) {
-                  checkInText.textContent = 'Program Completed!';
-                  checkInBtn.disabled = true;
-                } else {
-                  checkInText.textContent = 'Check In Today';
-                  checkInBtn.disabled = false;
-                }
-              }
-            } catch (e) {
-              console.error('Error loading progress:', e);
-              updateDebugInfo(`Error loading progress: ${e.message}`, 'error');
-            }
-          }
-        }
-
-        function updateDebugInfo(message, type = 'info') {
-          const timestamp = new Date().toLocaleTimeString();
-          const color = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#6b7280';
-          const entry = `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${message}</div>`;
-          debugContent.innerHTML += entry;
-          debugContent.scrollTop = debugContent.scrollHeight;
-        }
-
-        // Initial debug info
-        updateDebugInfo('Frontend initialized', 'info');
-        updateDebugInfo(`Backend URL: ${GAS_WEB_APP_URL}`, 'info');
       });
     </script>
   </div>
