@@ -345,6 +345,27 @@
         background-color: #cbd5e1;
       }
 
+      .debug-info {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        color: var(--light-text);
+        display: none;
+      }
+
+      .debug-toggle {
+        background: none;
+        border: none;
+        color: var(--light-text);
+        font-size: 0.75rem;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-top: 0.5rem;
+      }
+
       @media (max-width: 480px) {
         .ancestral-prayer-widget {
           padding: 1rem;
@@ -427,6 +448,13 @@
       </div>
     </div>
 
+    <!-- Debug Information -->
+    <button class="debug-toggle" id="debugToggle">Show Debug Info</button>
+    <div class="debug-info" id="debugInfo">
+      <strong>Debug Information:</strong>
+      <div id="debugContent"></div>
+    </div>
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         // ✅ ALL VARIABLES DECLARED PROPERLY
@@ -448,14 +476,27 @@
         const checkInText = document.getElementById('checkInText');
         const checkInSpinner = document.getElementById('checkInSpinner');
         const milestonesContainer = document.getElementById('milestonesContainer');
+        const debugToggle = document.getElementById('debugToggle');
+        const debugInfo = document.getElementById('debugInfo');
+        const debugContent = document.getElementById('debugContent');
         
         let selectedDays = 7;
         let currentDay = 1;
         let programStartDate = null;
         let localStorageKey = 'ancestralPrayerProgram';
 
+        // 🔥 REPLACE THIS WITH YOUR ACTUAL GAS WEB APP URL
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyT-s51aaCM0CjY0RIEjoAeuEJtPDTWYU--ND3KYbvkqPzRYnSJmmqkOZAhDwD60-AbWQ/exec';
+
         // Initialize from localStorage if available
         loadProgress();
+
+        // Debug toggle
+        debugToggle.addEventListener('click', function() {
+          const isVisible = debugInfo.style.display === 'block';
+          debugInfo.style.display = isVisible ? 'none' : 'block';
+          debugToggle.textContent = isVisible ? 'Show Debug Info' : 'Hide Debug Info';
+        });
 
         // Handle day selection
         dayButtons.forEach(button => {
@@ -479,23 +520,47 @@
           btnSpinner.style.display = 'inline-block';
           errorMessage.style.display = 'none';
           
+          // Debug info
+          updateDebugInfo('Sending request to backend...', 'info');
+          
           try {
-            // 🔑 CORRECTED URL: NO TRAILING SPACE, NO INVISIBLE CHARS
-            const response = await fetch('https://script.google.com/macros/s/AKfycbyT-s51aaCM0CjY0RIEjoAeuEJtPDTWYU--ND3KYbvkqPzRYnSJmmqkOZAhDwD60-AbWQ/exec', {
+            console.log('Sending request to:', GAS_WEB_APP_URL);
+            console.log('Request data:', { familyHistory, selectedDays });
+            
+            const requestBody = {
+              familyHistory: familyHistory,
+              selectedDays: selectedDays
+            };
+
+            updateDebugInfo(`Request: POST ${GAS_WEB_APP_URL}`, 'info');
+            updateDebugInfo(`Data: ${JSON.stringify(requestBody)}`, 'info');
+
+            const response = await fetch(GAS_WEB_APP_URL, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                familyHistory: familyHistory,
-                selectedDays: selectedDays
-              })
+              body: JSON.stringify(requestBody)
             });
-            
-            const data = await response.json();
-            
+
+            updateDebugInfo(`Response status: ${response.status}`, 'info');
+
             if (!response.ok) {
-              throw new Error(data.error?.message || 'Failed to generate prayer points');
+              const errorText = await response.text();
+              updateDebugInfo(`Error response: ${errorText}`, 'error');
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Response data:', data);
+            updateDebugInfo(`Success: ${JSON.stringify(data, null, 2)}`, 'success');
+            
+            if (!data.success) {
+              throw new Error(data.error || 'Unknown error from server');
+            }
+
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+              throw new Error('Invalid response format from server');
             }
             
             // Display results
@@ -510,7 +575,16 @@
             
           } catch (error) {
             console.error('Error:', error);
-            errorMessage.textContent = error.message || 'An unexpected error occurred. Please try again.';
+            updateDebugInfo(`Fetch Error: ${error.message}`, 'error');
+            
+            let userMessage = error.message;
+            if (error.message.includes('Failed to fetch')) {
+              userMessage = 'Network error: Cannot connect to server. Please check your internet connection and try again.';
+            } else if (error.message.includes('HTTP error')) {
+              userMessage = 'Server error: Please try again in a few moments.';
+            }
+            
+            errorMessage.textContent = userMessage;
             errorMessage.style.display = 'block';
           } finally {
             // Reset button state
@@ -569,6 +643,8 @@
           
           // Create milestones
           createMilestones();
+          
+          updateDebugInfo(`Progress initialized: ${selectedDays} days`, 'success');
         }
 
         function updateProgress() {
@@ -683,9 +759,22 @@
               }
             } catch (e) {
               console.error('Error loading progress:', e);
+              updateDebugInfo(`Error loading progress: ${e.message}`, 'error');
             }
           }
         }
+
+        function updateDebugInfo(message, type = 'info') {
+          const timestamp = new Date().toLocaleTimeString();
+          const color = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#6b7280';
+          const entry = `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${message}</div>`;
+          debugContent.innerHTML += entry;
+          debugContent.scrollTop = debugContent.scrollHeight;
+        }
+
+        // Initial debug info
+        updateDebugInfo('Frontend initialized', 'info');
+        updateDebugInfo(`Backend URL: ${GAS_WEB_APP_URL}`, 'info');
       });
     </script>
   </div>
