@@ -1,495 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ancestral Freedom Prayer Generator - TEST MODE</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Test Prayer Backend</title>
 </head>
 <body>
-  <div class="ancestral-prayer-widget">
-    <style>
-      /* [KEEP ALL YOUR EXISTING CSS STYLES - THEY ARE FINE] */
-      :root {
-        --primary-color: #6d28d9;
-        --secondary-color: #8b5cf6;
-        --bg-color: #f8fafc;
-        --text-color: #1e293b;
-        --light-text: #64748b;
-        --card-bg: #ffffff;
-        --success-color: #10b981;
-        --warning-color: #f59e0b;
-        --progress-color: #3b82f6;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        padding: 20px;
-        background-color: #f1f5f9;
-        font-family: 'Poppins', sans-serif;
-        display: flex;
-        justify-content: center;
-        min-height: 100vh;
-      }
-
-      .ancestral-prayer-widget {
-        font-family: 'Poppins', sans-serif;
-        max-width: 600px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 1.5rem;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      }
-
-      .widget-header {
-        text-align: center;
-        margin-bottom: 1.5rem;
-      }
-
-      .widget-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-
-      .widget-subtitle {
-        font-size: 0.875rem;
-        color: var(--light-text);
-        margin-bottom: 1rem;
-      }
-
-      .form-group {
-        margin-bottom: 1.25rem;
-      }
-
-      label {
-        display: block;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: var(--text-color);
-      }
-
-      textarea, input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.875rem;
-        transition: all 0.3s ease;
-      }
-
-      textarea {
-        min-height: 100px;
-        resize: vertical;
-      }
-
-      textarea:focus, input:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.2);
-      }
-
-      .btn {
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-      }
-
-      .btn:hover {
-        background-color: var(--secondary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-      }
-
-      .btn:disabled {
-        background-color: #cbd5e1;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
-
-      .loading-spinner {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top-color: white;
-        animation: spin 1s ease-in-out infinite;
-        margin-right: 8px;
-      }
-
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-
-      .result-card {
-        background-color: var(--card-bg);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-top: 1.5rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f1f5f9;
-        animation: fadeIn 0.5s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      .result-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-      }
-
-      .result-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--primary-color);
-      }
-
-      .copy-btn {
-        background-color: #f1f5f9;
-        color: var(--text-color);
-        border: none;
-        padding: 0.375rem 0.75rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-      }
-
-      .copy-btn:hover {
-        background-color: #e2e8f0;
-      }
-
-      .copy-btn.copied {
-        background-color: var(--success-color);
-        color: white;
-      }
-
-      .copy-icon {
-        margin-right: 4px;
-      }
-
-      .prayer-points {
-        line-height: 1.6;
-        white-space: pre-wrap;
-      }
-
-      .error-message {
-        color: #ef4444;
-        font-size: 0.875rem;
-        margin-top: 0.5rem;
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.6; }
-        100% { opacity: 1; }
-      }
-
-      .days-selector {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .day-btn {
-        flex: 1;
-        padding: 0.5rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        background-color: white;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 0.75rem;
-        text-align: center;
-      }
-
-      .day-btn:hover {
-        border-color: var(--primary-color);
-      }
-
-      .day-btn.active {
-        background-color: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-      }
-
-      .test-section {
-        background: #f1f5f9;
-        border: 2px dashed #cbd5e1;
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1rem 0;
-      }
-
-      .test-btn {
-        background-color: #f59e0b;
-        margin: 0.5rem;
-      }
-
-      .test-btn:hover {
-        background-color: #f97316;
-      }
-
-      .url-input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #cbd5e1;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        margin-bottom: 0.5rem;
-      }
-    </style>
-
-    <div class="widget-header">
-      <h1 class="widget-title">🔧 Ancestral Freedom Prayer Generator - TEST MODE</h1>
-      <p class="widget-subtitle">Testing connection to Google Apps Script backend</p>
-    </div>
-
-    <!-- TEST SECTION -->
-    <div class="test-section">
-      <h3 style="margin-top: 0; color: #f59e0b;">🔧 Connection Test</h3>
-      
-      <label for="gasUrl">Your GAS Web App URL:</label>
-      <input type="text" id="gasUrl" class="url-input" 
-             value="https://script.google.com/macros/s/AKfycbyT-s51aaCM0CjY0RIEjoAeuEJtPDTWYU--ND3KYbvkqPzRYnSJmmqkOZAhDwD60-AbWQ/exec"
-             placeholder="Paste your GAS Web App URL here">
-      
-      <button class="btn test-btn" id="testConnectionBtn">Test Connection</button>
-      <button class="btn test-btn" id="testBackendBtn">Test Backend Function</button>
-      
-      <div id="testResult" style="margin-top: 1rem; font-size: 0.875rem;"></div>
-    </div>
-
-    <form id="prayerForm">
-      <div class="form-group">
-        <label for="familyHistory">Describe your family history or challenges (optional)</label>
-        <textarea id="familyHistory" placeholder="E.g., History of addiction, financial struggles, broken relationships..."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Select program duration</label>
-        <div class="days-selector">
-          <button type="button" class="day-btn active" data-days="7">7 Days</button>
-          <button type="button" class="day-btn" data-days="21">21 Days</button>
-          <button type="button" class="day-btn" data-days="40">40 Days</button>
-        </div>
-      </div>
-
-      <button type="submit" class="btn" id="generateBtn">
-        <span id="btnText">Generate Prayer Points</span>
-        <span id="btnSpinner" class="loading-spinner" style="display: none;"></span>
-      </button>
-      <div id="errorMessage" class="error-message" style="display: none;"></div>
-    </form>
-
-    <div id="resultContainer" class="result-card" style="display: none;">
-      <div class="result-header">
-        <h2 class="result-title">Your Personalized Prayer Points</h2>
-        <button class="copy-btn" id="copyBtn">
-          <span class="copy-icon">📋</span>
-          <span id="copyText">Copy</span>
-        </button>
-      </div>
-      <div id="prayerPoints" class="prayer-points"></div>
-    </div>
+    <h1>Test Prayer Backend Connection</h1>
+    
+    <button onclick="testBackend()">Test Backend with Sample Data</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const prayerForm = document.getElementById('prayerForm');
-        const generateBtn = document.getElementById('generateBtn');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
-        const resultContainer = document.getElementById('resultContainer');
-        const prayerPoints = document.getElementById('prayerPoints');
-        const errorMessage = document.getElementById('errorMessage');
-        const dayButtons = document.querySelectorAll('.day-btn');
-        const gasUrlInput = document.getElementById('gasUrl');
-        const testConnectionBtn = document.getElementById('testConnectionBtn');
-        const testBackendBtn = document.getElementById('testBackendBtn');
-        const testResult = document.getElementById('testResult');
-        
-        let selectedDays = 7;
-        let currentGASUrl = gasUrlInput.value;
-
-        // Update GAS URL when input changes
-        gasUrlInput.addEventListener('input', function() {
-          currentGASUrl = this.value;
-        });
-
-        // Test connection button
-        testConnectionBtn.addEventListener('click', async function() {
-          testResult.innerHTML = 'Testing connection...';
-          testResult.style.color = '#f59e0b';
-          
-          try {
-            const response = await fetch(currentGASUrl, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
+        async function testBackend() {
+            const GAS_URL = 'https://script.google.com/macros/s/AKfycbz63OM5mWdxumbZvbOS2s5nji4qqlKmUNzWHXpuWrcptHCW-JBamQNammM_-dROeJ11/exec';
             
-            if (response.ok) {
-              testResult.innerHTML = '✅ SUCCESS: Connection established! Backend is reachable.';
-              testResult.style.color = '#10b981';
-            } else {
-              testResult.innerHTML = `❌ HTTP Error: ${response.status} ${response.statusText}`;
-              testResult.style.color = '#ef4444';
-            }
-          } catch (error) {
-            testResult.innerHTML = `❌ CONNECTION FAILED: ${error.message}`;
-            testResult.style.color = '#ef4444';
-            console.error('Connection test failed:', error);
-          }
-        });
-
-        // Test backend function
-        testBackendBtn.addEventListener('click', async function() {
-          testResult.innerHTML = 'Testing backend function...';
-          testResult.style.color = '#f59e0b';
-          
-          try {
-            const response = await fetch(currentGASUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                familyHistory: "Test prayer request",
+            const testData = {
+                familyHistory: "History of financial struggles and relationship issues in family",
                 selectedDays: 7
-              })
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok && data.success) {
-              testResult.innerHTML = '✅ SUCCESS: Backend function working! Response received.';
-              testResult.style.color = '#10b981';
-            } else {
-              testResult.innerHTML = `❌ BACKEND ERROR: ${data.error || 'Unknown error'}`;
-              testResult.style.color = '#ef4444';
-            }
-          } catch (error) {
-            testResult.innerHTML = `❌ REQUEST FAILED: ${error.message}`;
-            testResult.style.color = '#ef4444';
-            console.error('Backend test failed:', error);
-          }
-        });
+            };
 
-        // Handle day selection
-        dayButtons.forEach(button => {
-          button.addEventListener('click', function() {
-            dayButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            selectedDays = parseInt(this.dataset.days);
-          });
-        });
+            try {
+                document.getElementById('result').innerHTML = 'Sending request...';
+                
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
 
-        // Form submission
-        prayerForm.addEventListener('submit', async function(e) {
-          e.preventDefault();
-          
-          const familyHistory = document.getElementById('familyHistory').value;
-          
-          // Show loading state
-          generateBtn.disabled = true;
-          btnText.textContent = 'Generating...';
-          btnSpinner.style.display = 'inline-block';
-          errorMessage.style.display = 'none';
-          
-          try {
-            console.log('Using GAS URL:', currentGASUrl);
-            
-            const response = await fetch(currentGASUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                familyHistory: familyHistory,
-                selectedDays: selectedDays
-              })
-            });
-            
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <div style="color: green; font-weight: bold;">
+                            ✅ SUCCESS! Backend is working perfectly!
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <strong>Generated Prayer:</strong><br>
+                            <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">${data.choices[0].message.content}</pre>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <div style="color: red; font-weight: bold;">
+                            ❌ Backend Error: ${data.error}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <div style="color: red; font-weight: bold;">
+                        ❌ Network Error: ${error.message}
+                    </div>
+                `;
             }
-            
-            const data = await response.json();
-            
-            if (!data.success) {
-              throw new Error(data.error || 'Unknown error from server');
-            }
-            
-            // Display results
-            prayerPoints.textContent = data.choices[0].message.content;
-            resultContainer.style.display = 'block';
-            
-            // Scroll to results
-            resultContainer.scrollIntoView({ behavior: 'smooth' });
-            
-          } catch (error) {
-            console.error('Error:', error);
-            
-            let userMessage = error.message;
-            if (error.message.includes('Failed to fetch')) {
-              userMessage = `
-                <strong>Network Connection Failed</strong><br>
-                Possible causes:<br>
-                1. Wrong GAS URL - Check the URL above<br>
-                2. GAS not deployed - Make sure it's deployed as Web App<br>
-                3. CORS issue - Try the test buttons above<br>
-                4. Network firewall - Try different network<br>
-                <br>
-                <em>Use the test buttons above to diagnose the issue.</em>
-              `;
-            }
-            
-            errorMessage.innerHTML = userMessage;
-            errorMessage.style.display = 'block';
-          } finally {
-            // Reset button state
-            generateBtn.disabled = false;
-            btnText.textContent = 'Generate Prayer Points';
-            btnSpinner.style.display = 'none';
-          }
-        });
-      });
+        }
     </script>
-  </div>
 </body>
 </html>
